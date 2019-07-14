@@ -4,10 +4,14 @@ import { AmiiboModel } from "../services/AmiibosModel";
 
 export interface AmiiboItemProps {
   amiibo: AmiiboModel;
+
+  isCollected: boolean;
+
+  onChange: (isCollected: boolean) => void;
 }
 
 export const AmiiboItem: FC<AmiiboItemProps> =
-  ({ amiibo }) => {
+  ({ amiibo, isCollected, onChange }) => {
     return (
       <IonItem lines="full">
         <IonThumbnail slot="start">
@@ -17,7 +21,11 @@ export const AmiiboItem: FC<AmiiboItemProps> =
           <h4>{amiibo.name}</h4>
           <p>{amiibo.series}</p>
         </IonLabel>
-        <IonToggle slot="end" />
+        <IonToggle 
+          slot="end" 
+          checked={isCollected}
+          onChange={() => onChange(!isCollected)}
+        />
       </IonItem>
     );
   }
