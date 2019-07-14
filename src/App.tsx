@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { FC } from 'react';
 import './App.css';
-import { IonApp, IonContent, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+import { IonApp } from '@ionic/react';
+import { AmiibosPage } from './amiibos/components/AmiibosPage';
+import { Router, Route, Redirect } from 'react-router';
+import { history } from './config/history';
+import { ContainerProvider } from './core/components/ContainerProvider';
+import { container } from './config/container';
 
-const App: React.FC = () => {
+export const App: FC = () => {
   return (
-    <IonApp>
-      <IonContent>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardSubtitle>Welcome to Ionic</IonCardSubtitle>
-            <IonCardTitle>Running on React</IonCardTitle>
-          </IonCardHeader>
-        </IonCard>
-      </IonContent>
-    </IonApp>
+    <ContainerProvider container={container}>
+      <Router history={history}>
+        <IonApp>
+          <Route path="/amiibos" component={AmiibosPage} />
+          <Redirect from="**" to="/amiibos" />
+        </IonApp>
+      </Router>
+    </ContainerProvider>
   );
 }
-
-export default App;
