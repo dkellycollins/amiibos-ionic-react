@@ -1,11 +1,12 @@
 import React, { FC, useState } from "react";
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonFooter } from "@ionic/react";
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonFooter } from "@ionic/react";
 import { RouteComponentProps } from "react-router";
 import { AmiibosList } from "./AmiibosList";
 import { ProgressToolbar } from "./ProgressToolbar";
 import { SelectSeriesModal } from "./SelectSeriesModal";
 import { useInstance } from "../../core/hooks/useInstance";
 import { AmiibosService } from "../services/AmiibosService";
+import MdFunnel from 'react-ionicons/lib/MdFunnel';
 
 export interface AmiibosPageProps extends RouteComponentProps {
 
@@ -28,7 +29,7 @@ export const AmiibosPage: FC<AmiibosPageProps> =
             <IonTitle>{title}</IonTitle>
             <IonButtons slot="end">
               <IonButton onClick={() => setIsModelOpen(true)}>
-                <IonIcon name="funnel" />
+                <MdFunnel />
               </IonButton>
             </IonButtons>
           </IonToolbar>
@@ -41,10 +42,11 @@ export const AmiibosPage: FC<AmiibosPageProps> =
         </IonFooter>
         <SelectSeriesModal 
           isOpen={isModalOpen} 
-          onDismiss={(series) => {
+          onSelectSeries={(series) => {
             setSelectedSeries(series);
             setIsModelOpen(false);
           }} 
+          onDismiss={() => setIsModelOpen(false)}
         />
       </>
     );
