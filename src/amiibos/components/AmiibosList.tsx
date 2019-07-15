@@ -18,7 +18,10 @@ export const AmiibosList: FC<AmiibosListProps> =
             key={amiibo.slug} 
             amiibo={amiibo} 
             isCollected={amiibo.isCollected} 
-            onChange={(isCollected) => onChange(amiibo.slug, isCollected)} 
+            onChange={(isCollected) => {
+              console.log(`AmiibosList`, isCollected);
+              onChange(amiibo.slug, isCollected)
+            }} 
           />
         ))}
       </IonList>

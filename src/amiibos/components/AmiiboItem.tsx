@@ -22,9 +22,12 @@ export const AmiiboItem: FC<AmiiboItemProps> =
           <p>{amiibo.series}</p>
         </IonLabel>
         <IonToggle 
-          slot="end" 
+          slot="end"
           checked={isCollected}
-          onChange={() => onChange(!isCollected)}
+          onChange={() => {
+            console.log(`AmiiboItem`, isCollected);
+            onChange(!isCollected)
+          }}
         />
       </IonItem>
     );

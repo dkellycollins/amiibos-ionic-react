@@ -3,6 +3,7 @@ import { IonModal, IonList, IonItem, IonHeader, IonToolbar, IonTitle, IonContent
 import { useInstance } from '../../core/hooks/useInstance';
 import { AmiibosService } from '../services/AmiibosService';
 import MdClose from 'react-ionicons/lib/MdClose';
+import { useObservable } from '../../core/hooks/useObservable';
 
 export interface SelectSeriesModalProps {
   isOpen: boolean;
@@ -15,6 +16,8 @@ export interface SelectSeriesModalProps {
 export const SelectSeriesModal: FC<SelectSeriesModalProps> =
   ({ isOpen, onSelectSeries, onDismiss }) => {
     const amiibosService = useInstance(AmiibosService);
+
+    const series = useObservable(() => amiibosService.getAmiiboSeries(), [], [amiibosService]);
 
     return (
       <IonContent>
@@ -33,9 +36,9 @@ export const SelectSeriesModal: FC<SelectSeriesModalProps> =
             <IonItem lines="full" onClick={() => onSelectSeries(null)}>
               All Amiibos
             </IonItem>
-            {amiibosService.getAmiiboSeries().map(series => (
-              <IonItem key={series} lines="full" onClick={() => onSelectSeries(series)}>
-                {series}
+            {series.map(s => (
+              <IonItem key={s} lines="full" onClick={() => onSelectSeries(s)}>
+                {s}
               </IonItem>
             ))}
           </IonList>

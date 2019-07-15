@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { BehaviorSubject, Observable } from "rxjs";
-import { skip, map } from 'rxjs/operators';
+import { skip, map, tap } from 'rxjs/operators';
 
 @injectable()
 export class UserAmiibosService {
@@ -15,10 +15,12 @@ export class UserAmiibosService {
   public getCollectedAmiibos(): Observable<Array<string>> {
     return this.collectedAmiibos$.pipe(
       map(collectedAmiibos => Object.entries(collectedAmiibos).filter(([_, collected]) => collected).map(([m]) => m)),
+      tap(console.log)
     );
   }
 
   public toggleAmiibo(slug: string, collected: boolean) {
+    console.log(`toggleAmiibo`, slug, collected);
     this.collectedAmiibos$.next({
       ...this.collectedAmiibos$.getValue(),
       [slug]: collected

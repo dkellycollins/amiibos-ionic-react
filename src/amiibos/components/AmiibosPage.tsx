@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo } from "react";
+import React, { FC, useState } from "react";
 import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonFooter } from "@ionic/react";
 import { RouteComponentProps } from "react-router";
 import { AmiibosList } from "./AmiibosList";
@@ -22,13 +22,11 @@ export const AmiibosPage: FC<AmiibosPageProps> =
     const [selectedSeries, setSelectedSeries] = useState<string | null>(null)
     const [isModalOpen, setIsModelOpen] = useState(false);
 
-    const collectedAmiibos$ = useMemo(() => userAmiibosService.getCollectedAmiibos(), [userAmiibosService]);
-    const collectedAmiibos = useObservable(collectedAmiibos$, []);
+    const amiibos = useObservable(() => selectedSeries ? amiibosService.getAmiibosBySeries(selectedSeries) : amiibosService.getAmiibos(), [], [amiibosService, selectedSeries]);
+    const collectedAmiibos = useObservable(() => userAmiibosService.getCollectedAmiibos(), [], [userAmiibosService]);
 
     const title = selectedSeries ? selectedSeries : 'All Amiibos';
-    const amiibos = selectedSeries 
-      ? amiibosService.getAmiibosBySeries(selectedSeries).map(amiibo => ({ ...amiibo, isCollected: collectedAmiibos.indexOf(amiibo.slug) > 0})) 
-      : amiibosService.getAmiibos().map(amiibo => ({ ...amiibo, isCollected: collectedAmiibos.indexOf(amiibo.slug) > 0}));
+    const userAmiibos = amiibos.map(amiibo => ({ ...amiibo, isCollected: collectedAmiibos.indexOf(amiibo.slug) >= 0 }));
 
     return (
       <>
@@ -44,8 +42,12 @@ export const AmiibosPage: FC<AmiibosPageProps> =
         </IonHeader>
         <IonContent>
           <AmiibosList 
-            amiibos={amiibos}
-            onChange={(slug, isCollected) => userAmiibosService.toggleAmiibo(slug, isCollected)} />
+            amiibos={userAmiibos}
+            onChange={(slug, isCollected) => {
+              console.log(`AmiibosPage`, slug, isCollected);
+              userAmiibosService.toggleAmiibo(slug, isCollected);
+            }} 
+          />
         </IonContent>
         <IonFooter>
           <ProgressToolbar />

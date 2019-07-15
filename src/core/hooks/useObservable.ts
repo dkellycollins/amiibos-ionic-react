@@ -1,7 +1,10 @@
 import { Observable } from 'rxjs';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
-export function useObservable<T>(observable$: Observable<T>, initialState: T): T {
+export type ObservableFactory<T> = () => Observable<T>;
+
+export function useObservable<T>(observableFactory: ObservableFactory<T>, initialState: T, deps: Array<any> = []): T {
+  const observable$ = useMemo<Observable<T>>(observableFactory, deps);
   const [state, setState] = useState(initialState);
 
   useEffect(() => {
