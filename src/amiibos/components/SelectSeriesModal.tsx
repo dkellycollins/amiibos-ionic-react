@@ -1,9 +1,7 @@
 import React, { FC } from 'react';
 import { IonModal, IonList, IonItem, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton } from '@ionic/react';
-import { useInstance } from '../../core/hooks/useInstance';
-import { AmiibosService } from '../services/AmiibosService';
 import MdClose from 'react-ionicons/lib/MdClose';
-import { useObservable } from '../../core/hooks/useObservable';
+import { useAmiiboSeries } from '../hooks/useAmiiboSeries';
 
 export interface SelectSeriesModalProps {
   isOpen: boolean;
@@ -15,9 +13,7 @@ export interface SelectSeriesModalProps {
 
 export const SelectSeriesModal: FC<SelectSeriesModalProps> =
   ({ isOpen, onSelectSeries, onDismiss }) => {
-    const amiibosService = useInstance(AmiibosService);
-
-    const series = useObservable(() => amiibosService.getAmiiboSeries(), [], [amiibosService]);
+    const series = useAmiiboSeries();
 
     return (
       <IonContent>
